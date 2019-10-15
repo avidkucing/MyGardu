@@ -19,6 +19,8 @@ import {
 import AsyncStorage from '@react-native-community/async-storage';
 import {showLocation} from 'react-native-map-link';
 import openMap from 'react-native-open-maps';
+import {connect} from 'react-redux';
+import {editContent} from './actions';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Header from './Header';
@@ -28,15 +30,8 @@ import LabeledText from './LabeledText';
 import LabeledTextInput from './LabeledTextInput';
 import ButtonSecondary from './ButtonSecondary';
 import ButtonPrimary from './ButtonPrimary';
-import {initialData} from './data';
 
-// let storageData = AsyncStorage.getItem('data');
-
-// if (!Array.isArray(storageData)) {
-//   storageData = initialData;
-// }
-
-const Info: () => React$Node = ({navigation}) => {
+const Info: () => React$Node = ({navigation, editContent}) => {
   const item = navigation.getParam('item');
 
   const [edit, setEdit] = useState(false);
@@ -163,7 +158,7 @@ const Info: () => React$Node = ({navigation}) => {
               </>
             )}
           </View>
-          {/* <View
+          <View
             style={{
               marginLeft: 10,
               marginRight: 10,
@@ -175,7 +170,7 @@ const Info: () => React$Node = ({navigation}) => {
                 clear();
               }}
             />
-          </View> */}
+          </View>
           <View
             style={{
               marginTop: 10,
@@ -184,27 +179,20 @@ const Info: () => React$Node = ({navigation}) => {
             }}>
             <ButtonPrimary
               text={edit ? 'Save' : 'View on GMaps'}
-              // onPress={() => {
-              //   // edit ?  : null
-              //   saveItem({
-              //     id: item.id,
-              //     name: name,
-              //     lat: lat,
-              //     long: long,
-              //   });
-              // }}
-              onPress={() => {
-                // alert(parseFloat(item.lat) + " " + parseFloat(item.long))
-                // showLocation({
-                //   latitude: item.lat,
-                //   longitude: item.long,
-                // });
-                // openMap({
-                //   latitude: parseFloat(item.lat),
-                //   longitude: parseFloat(item.long),
-                // });
-                Linking.openURL('geo:?q=' + item.long + ',' + item.lat);
-              }}
+              onPress={
+                edit
+                  ? () => {
+                      editContent({
+                        id: item.id,
+                        name: name,
+                        lat: lat,
+                        long: long,
+                      });
+                      setEdit(false);
+                    }
+                  : () =>
+                      Linking.openURL('geo:?q=' + item.lat + ',' + item.long)
+              }
             />
           </View>
         </View>
@@ -213,4 +201,7 @@ const Info: () => React$Node = ({navigation}) => {
   );
 };
 
-export default Info;
+export default connect(
+  null,
+  {editContent},
+)(Info);

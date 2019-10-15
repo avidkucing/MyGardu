@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React from 'react';
 import {
   SafeAreaView,
@@ -17,9 +9,11 @@ import {
 } from 'react-native';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
+import {Provider} from 'react-redux';
+import {store, persistor} from './store';
+import {PersistGate} from 'redux-persist/integration/react';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import Header from './Header';
 import List from './List';
 import Info from './Info';
 
@@ -33,7 +27,6 @@ const App: () => React$Node = () => {
             height: '100%',
             backgroundColor: '#f0f0fa',
           }}>
-          <Header title="MyGardu" noIcon />
           <List />
         </View>
       </SafeAreaView>
@@ -56,4 +49,14 @@ const AppNavigator = createStackNavigator(
   },
 );
 
-export default createAppContainer(AppNavigator);
+const Navigator = createAppContainer(AppNavigator);
+
+export default function() {
+  return (
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <Navigator />
+      </PersistGate>
+    </Provider>
+  );
+}

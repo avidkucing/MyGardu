@@ -2,27 +2,22 @@ import React, {Fragment, useState, useEffect} from 'react';
 import {View, Text, TouchableOpacity, RefreshControl} from 'react-native';
 import {withNavigationFocus} from 'react-navigation';
 import {ScrollView, FlatList} from 'react-native-gesture-handler';
-import AsyncStorage from '@react-native-community/async-storage';
+import {connect} from 'react-redux';
 
 import Loading from './Loading';
 import Empty from './Empty';
-import {initialData} from './data';
+import Header from './Header';
 
-// let storageData = AsyncStorage.getItem('data');
-
-// if (!Array.isArray(storageData)) {
-//   storageData = initialData;
-// }
-
-const List = ({navigation, isFocused}) => {
-  const [data, setData] = useState(initialData);
+const List = ({navigation, isFocused, listData}) => {
+  const [data, setData] = useState(listData);
+  const [search, setSearch] = useState('');
 
   const [loading, setLoading] = useState(true);
   const [empty, setEmpty] = useState(false);
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    // alert(JSON.stringify(initialData));
+    // alert(JSON.stringify(listData));
     setLoading(false);
     setEmpty(false);
     setSuccess(false);
@@ -31,6 +26,13 @@ const List = ({navigation, isFocused}) => {
     !data && setLoading(true);
     data && setSuccess(true);
   }, [data]);
+
+  useEffect(() => {
+    let filteredData = listData.filter(el =>
+      el.name.toLowerCase().includes(search.toLowerCase()),
+    );
+    setData(filteredData);
+  }, [listData, search]);
 
   const Item = ({element}) => {
     return (
@@ -73,6 +75,13 @@ const List = ({navigation, isFocused}) => {
 
   return (
     <Fragment>
+      <Header
+        search
+        title="MyGardu"
+        noIcon
+        searchText={search}
+        onChangeText={setSearch}
+      />
       {loading && <Loading />}
       {empty && <Empty />}
       {success && (
@@ -88,4 +97,6 @@ const List = ({navigation, isFocused}) => {
   );
 };
 
-export default withNavigationFocus(List);
+export default connect(state => ({
+  listData: state.all,
+}))(withNavigationFocus(List));

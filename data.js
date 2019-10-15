@@ -413,7 +413,7 @@ const garduName = [
   'PLBE',
 ];
 
-const garduLat = [
+const garduLong = [
   '107.4072646',
   '107.3919203',
   '107.4004543',
@@ -826,7 +826,7 @@ const garduLat = [
   '107.49603000000',
 ];
 
-const garduLong = [
+const garduLat = [
   '-6.383390004',
   '-6.38716845',
   '-6.384510006',
