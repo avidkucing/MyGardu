@@ -20,7 +20,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {showLocation} from 'react-native-map-link';
 import openMap from 'react-native-open-maps';
 import {connect} from 'react-redux';
-import {editContent} from './actions';
+import {editContent, deleteContent} from './actions';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Header from './Header';
@@ -31,7 +31,7 @@ import LabeledTextInput from './LabeledTextInput';
 import ButtonSecondary from './ButtonSecondary';
 import ButtonPrimary from './ButtonPrimary';
 
-const Info: () => React$Node = ({navigation, editContent}) => {
+const Info: () => React$Node = ({navigation, editContent, deleteContent}) => {
   const item = navigation.getParam('item');
 
   const [edit, setEdit] = useState(false);
@@ -126,7 +126,7 @@ const Info: () => React$Node = ({navigation, editContent}) => {
                     icon="hash"
                     iconType="feather"
                     label="Gardu Name"
-                    text={item.name ? item.name : '-'}
+                    text={name}
                   />
                 </View>
                 <View
@@ -139,7 +139,7 @@ const Info: () => React$Node = ({navigation, editContent}) => {
                     icon="hash"
                     iconType="feather"
                     label="Gardu Latitude"
-                    text={item.lat ? item.lat : '-'}
+                    text={lat}
                   />
                 </View>
                 <View
@@ -152,12 +152,26 @@ const Info: () => React$Node = ({navigation, editContent}) => {
                     icon="hash"
                     iconType="feather"
                     label="Gardu Longitude"
-                    text={item.long ? item.long : '-'}
+                    text={long}
                   />
                 </View>
               </>
             )}
           </View>
+          {/* {!edit && (
+            <View
+              style={{
+                marginLeft: 10,
+                marginRight: 10,
+              }}>
+              <ButtonSecondary
+                text="Delete"
+                onPress={() => {
+                  deleteContent(item.id);
+                }}
+              />
+            </View>
+          )} */}
           <View
             style={{
               marginLeft: 10,
@@ -203,5 +217,5 @@ const Info: () => React$Node = ({navigation, editContent}) => {
 
 export default connect(
   null,
-  {editContent},
+  {editContent, deleteContent},
 )(Info);

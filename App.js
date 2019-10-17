@@ -16,6 +16,7 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import List from './List';
 import Info from './Info';
+import Add from './Add';
 
 const App: () => React$Node = () => {
   return (
@@ -41,6 +42,9 @@ const AppNavigator = createStackNavigator(
     },
     Info: {
       screen: Info,
+    },
+    Add: {
+      screen: Add,
     },
   },
   {

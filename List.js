@@ -3,6 +3,7 @@ import {View, Text, TouchableOpacity, RefreshControl} from 'react-native';
 import {withNavigationFocus} from 'react-navigation';
 import {ScrollView, FlatList} from 'react-native-gesture-handler';
 import {connect} from 'react-redux';
+import {Icon} from 'react-native-elements';
 
 import Loading from './Loading';
 import Empty from './Empty';
@@ -93,6 +94,15 @@ const List = ({navigation, isFocused, listData}) => {
           renderItem={({item, index}) => <Item element={item} key={index} />}
         />
       )}
+      <TouchableOpacity
+        style={{
+          position: 'absolute',
+          bottom: 20,
+          right: 15,
+        }}
+        onPress={() => navigation.navigate('Add')}>
+        <Icon reverse name="add" color="#2c89dd" />
+      </TouchableOpacity>
     </Fragment>
   );
 };

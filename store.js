@@ -1,8 +1,8 @@
 import {createStore} from 'redux';
 import {persistStore, persistReducer} from 'redux-persist';
-import {EDIT} from './actionTypes';
-import AsyncStorage from '@react-native-community/async-storage';
-import FilesystemStorage from 'redux-persist-filesystem-storage'
+import {ADD, EDIT, DELETE} from './actionTypes';
+// import AsyncStorage from '@react-native-community/async-storage';
+import FilesystemStorage from 'redux-persist-filesystem-storage';
 
 import {initialData} from './data';
 
@@ -12,22 +12,32 @@ const persistConfig = {
 };
 
 const initialState = {
-  all: [],
+  all: initialData,
 };
 
 function reducer(state = initialState, action) {
   switch (action.type) {
+    case ADD: {
+      let newAll = [
+        ...state.all,
+        {...action.payload, id: state.all[state.all.length - 1].id + 1},
+      ];
+      return {...state, all: newAll};
+    }
     case EDIT: {
       const {id, name, lat, long} = action.payload;
-      let selected = state.all[id];
 
-      selected.name = name;
-      selected.lat = lat;
-      selected.long = long;
-
-      state.all[id] = selected;
-
-      return state;
+      let newAll = state.all.map(el =>
+        el.id === id
+          ? {
+              ...el,
+              name: name,
+              lat: lat,
+              long: long,
+            }
+          : el,
+      );
+      return {...state, all: newAll};
     }
     default:
       return state;
